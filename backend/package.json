@@ -1,5 +1,5 @@
 {
-  "name": "healthnova-backend",  
+  "name": "healthnova-backend",
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.9.1"
   },
   "devDependencies": {
