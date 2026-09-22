@@ -1,0 +1,86 @@
+/*
+ * HealthNova design tokens.
+ *
+ * Every colour below is taken from the Flutter application in hospital/lib so
+ * the dashboard reads as the same product. The Dart source of each value is
+ * named in the comment beside it.
+ *
+ * Note: main.dart seeds ThemeData with Colors.deepPurple, but that seed is
+ * never visible - every screen overrides it with explicit Colors.blue*. The
+ * app's real identity is Material Blue, which is what these tokens follow.
+ */
+
+:root {
+  /* ---- Brand ---- */
+  --primary-color: #2196f3; /* Colors.blue - AppBar, login button, splash icon */
+  --primary-dark: #1976d2; /* blue[700] - hover and active states */
+  --primary-light: #64b5f6; /* Colors.blue[300] - DoctorListScreen AppBar */
+  --primary-pale: #bbdefb; /* Colors.blue[100] - DoctorListScreen scaffold */
+  --primary-surface: #e3f2fd; /* blue[50] - selected nav row, tints */
+  --secondary-color: #448aff; /* Colors.blueAccent - Home_screen stat cards */
+
+  /* ---- Surfaces ---- */
+  --background-color: #f5f7fa;
+  --surface-color: #ffffff; /* Colors.white - every card in the Flutter app */
+  --surface-muted: #fafbfc;
+  --border-color: #e0e0e0; /* grey[300] */
+  --border-strong: #bdbdbd;
+
+  /* ---- Text ----
+   * Flutter uses Colors.grey (#9E9E9E) for secondary text, which measures
+   * 2.8:1 on white and fails WCAG AA. grey[600] keeps the same grey family
+   * at a legible 4.6:1. #9E9E9E is retained below for disabled states only.
+   */
+  --text-primary: #212121;
+  --text-secondary: #757575;
+  --text-disabled: #9e9e9e; /* Colors.grey */
+  --text-on-primary: #ffffff;
+
+  /* ---- Status ----
+   * success and warning come straight from the Flutter app. There is no red
+   * anywhere in hospital/lib, so danger is taken from Material red[600] - the
+   * same Material palette every other colour here belongs to.
+   */
+  --success-color: #388e3c; /* Colors.green[700] - consultation fees */
+  --success-surface: #e8f5e9;
+  --warning-color: #ffa000; /* amber[700], darkened from Colors.amber */
+  --warning-surface: #fff8e1;
+  --danger-color: #e53935; /* Material red[600] - introduced, see note */
+  --danger-surface: #ffebee;
+  --info-color: #2196f3;
+  --info-surface: #e3f2fd;
+
+  /* ---- Shape - measured from the Flutter widgets ---- */
+  --radius-card: 25px; /* BorderRadius.circular(25) on doctor cards */
+  --radius-panel: 16px;
+  --radius-control: 12px; /* ElevatedButton in Login_screen.dart */
+  --radius-input: 15px; /* TextFormField in Login_screen.dart */
+  --radius-pill: 999px;
+
+  /* ---- Elevation - Flutter Card elevation: 7 ---- */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-raised: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-overlay: 0 8px 32px rgba(0, 0, 0, 0.18);
+
+  /* ---- Spacing ---- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* ---- Typography ---- */
+  --font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 15px;
+  --font-size-lg: 18px;
+  --font-size-xl: 22px;
+  --font-size-2xl: 28px;
+
+  /* ---- Layout ---- */
+  --sidebar-width: 256px;
+  --header-height: 64px;
+  --transition: 160ms ease;
+}

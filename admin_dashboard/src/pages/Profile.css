@@ -1,0 +1,56 @@
+.profile-card {
+  max-width: 640px;
+  margin-bottom: var(--space-lg);
+}
+
+.profile-list {
+  margin: 0;
+}
+
+.profile-row {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.profile-row:last-child {
+  border-bottom: none;
+}
+
+.profile-row dt {
+  flex: 0 0 150px;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.profile-row dd {
+  margin: 0;
+  min-width: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.profile-mono {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: var(--font-size-xs) !important;
+}
+
+.profile-note {
+  max-width: 640px;
+  border-style: dashed;
+  box-shadow: none;
+  background: var(--surface-muted);
+}
+
+@media (max-width: 600px) {
+  .profile-row {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .profile-row dt {
+    flex-basis: auto;
+  }
+}
