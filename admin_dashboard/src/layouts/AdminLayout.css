@@ -1,0 +1,238 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  height: 100vh;
+  padding: var(--space-md);
+  background: var(--surface-color);
+  border-right: 1px solid var(--border-color);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-sm) var(--space-lg);
+}
+
+.sidebar-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--radius-control);
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.sidebar-brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.sidebar-brand-text strong {
+  font-size: var(--font-size-lg);
+}
+
+.sidebar-brand-text small {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+.sidebar-close {
+  display: none;
+  margin-left: auto;
+  padding: var(--space-xs);
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  padding: 0 var(--space-md);
+  border-radius: var(--radius-control);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+.sidebar-link:hover:not(.is-disabled) {
+  background: var(--primary-surface);
+}
+
+.sidebar-link.is-active {
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.sidebar-link.is-disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.sidebar-group-label {
+  padding: var(--space-md) var(--space-md) var(--space-xs);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-disabled);
+}
+
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: 44px;
+  margin-top: var(--space-md);
+  padding: 0 var(--space-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-control);
+  background: var(--surface-color);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--danger-color);
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.sidebar-logout:hover {
+  background: var(--danger-surface);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+/* ---------- Main column ---------- */
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--sidebar-width);
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  height: var(--header-height);
+  padding: 0 var(--space-lg);
+  background: var(--surface-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.admin-header-menu {
+  display: none;
+  padding: var(--space-xs);
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.admin-header-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+}
+
+.admin-header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-left: auto;
+  min-width: 0;
+}
+
+.admin-header-email {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-content {
+  flex: 1;
+  padding: var(--space-lg);
+}
+
+/* ---------- Tablet and below ---------- */
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition);
+    box-shadow: var(--shadow-overlay);
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close {
+    display: block;
+  }
+
+  .sidebar-backdrop.is-visible {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    background: rgba(0, 0, 0, 0.4);
+  }
+
+  .admin-main {
+    margin-left: 0;
+  }
+
+  .admin-header-menu {
+    display: block;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-header {
+    padding: 0 var(--space-md);
+  }
+
+  .admin-header-email {
+    display: none;
+  }
+
+  .admin-content {
+    padding: var(--space-md);
+  }
+}

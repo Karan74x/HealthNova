@@ -1,0 +1,89 @@
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-lg);
+  /* Echoes the Flutter login screen's blue field without putting white text
+     on a mid-blue background, which fails contrast. */
+  background: linear-gradient(160deg, var(--primary-surface), #ffffff 65%);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-xl);
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-raised);
+}
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.login-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: var(--space-sm);
+  border-radius: var(--radius-panel);
+  background: var(--primary-color);
+  color: var(--text-on-primary);
+}
+
+.login-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+.login-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.login-card .alert {
+  margin-bottom: var(--space-md);
+}
+
+.login-password {
+  position: relative;
+}
+
+.login-password .field-input {
+  padding-right: 46px;
+}
+
+.login-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: var(--space-sm);
+  transform: translateY(-50%);
+  display: inline-flex;
+  padding: var(--space-xs);
+  border: none;
+  background: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.login-footnote {
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: var(--space-lg);
+  }
+}
