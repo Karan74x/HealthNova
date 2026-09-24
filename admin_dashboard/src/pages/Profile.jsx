@@ -14,6 +14,7 @@ function formatTimestamp(seconds) {
 
 export default function Profile() {
   const { user } = useAuth();
+  const roleLabel = user.role === "doctor" ? "doctor" : "administrator";
   const [tokenDetails, setTokenDetails] = useState(null);
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
@@ -54,7 +55,7 @@ export default function Profile() {
       <div className="page-header">
         <h2>Profile</h2>
         <p className="page-subtitle">
-          Account details for the signed-in administrator.
+          Account details for the signed-in {roleLabel}.
         </p>
       </div>
 

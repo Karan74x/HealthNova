@@ -21,8 +21,8 @@ export default function Unauthorized() {
         <h1 className="message-title">Access denied</h1>
         <p className="message-text">
           {user
-            ? `This dashboard is for administrators. Your account is signed in with the "${user.role}" role.`
-            : "This dashboard is restricted to administrator accounts."}
+            ? `This dashboard is for administrator and doctor accounts. Your account is signed in with the "${user.role}" role.`
+            : "This dashboard is restricted to administrator and doctor accounts."}
         </p>
         <button type="button" className="btn btn-primary" onClick={handleSignOut}>
           Sign in with another account
