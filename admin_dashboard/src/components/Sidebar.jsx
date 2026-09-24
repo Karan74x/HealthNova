@@ -1,36 +1,19 @@
 import { NavLink } from "react-router-dom";
-import {
-  CalendarCheck,
-  Activity,
-  LayoutDashboard,
-  LogOut,
-  Stethoscope,
-  UserRound,
-  Users,
-  X,
-} from "lucide-react";
+import { LogOut, X } from "lucide-react";
+import { getArea } from "../config/navigation";
 
 /*
- * Navigation for the admin area.
+ * Navigation for whichever staff area the signed-in role belongs to.
  *
- * Only Dashboard and Profile are reachable: they are the sole admin screens
- * the backend currently supports. The remaining four are rendered as disabled
- * entries so the intended structure is visible without implying that the
- * features work. They become links once Karan's endpoints land.
+ * Only the screens the backend can actually serve are links. The rest are
+ * rendered as disabled entries so the intended structure is visible without
+ * implying that the features work; they become links once the matching
+ * endpoints exist.
  */
-const availableLinks = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { to: "/admin/profile", label: "Profile", icon: UserRound },
-];
+export default function Sidebar({ role, isOpen, onClose, onLogout }) {
+  const area = getArea(role);
+  if (!area) return null;
 
-const pendingLinks = [
-  { label: "Doctors", icon: Stethoscope },
-  { label: "Patients", icon: Users },
-  { label: "Appointments", icon: CalendarCheck },
-  { label: "Predictions", icon: Activity },
-];
-
-export default function Sidebar({ isOpen, onClose, onLogout }) {
   return (
     <>
       <div
@@ -41,15 +24,19 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
 
       <aside
         className={`sidebar${isOpen ? " is-open" : ""}`}
-        aria-label="Admin navigation"
+        aria-label={`${area.label} navigation`}
       >
         <div className="sidebar-brand">
-          <span className="sidebar-logo" aria-hidden="true">
-            <Activity size={22} />
-          </span>
+          <img
+            src="/logo-icon.png"
+            alt=""
+            className="sidebar-logo"
+            width="38"
+            height="38"
+          />
           <span className="sidebar-brand-text">
             <strong>HealthNova</strong>
-            <small>Admin</small>
+            <small>{area.label}</small>
           </span>
           <button
             type="button"
@@ -62,7 +49,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
         </div>
 
         <nav className="sidebar-nav">
-          {availableLinks.map(({ to, label, icon: Icon, end }) => (
+          {area.links.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
               to={to}
@@ -79,7 +66,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
 
           <p className="sidebar-group-label">Awaiting backend</p>
 
-          {pendingLinks.map(({ label, icon: Icon }) => (
+          {area.pending.map(({ label, icon: Icon }) => (
             <span
               key={label}
               className="sidebar-link is-disabled"

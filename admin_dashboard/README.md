@@ -1,6 +1,9 @@
-# HealthNova – Admin Dashboard
+# HealthNova – Admin & Doctor Dashboard
 
 React web application for the HealthNova Smart Healthcare Management System.
+One application serves both staff roles: the role on the signed-in account
+decides whether it opens the administrator area (`/admin`) or the doctor area
+(`/doctor`).
 Part of the MCA Semester 3 group project; this module is maintained by
 Harshrajsinh Zala and sits alongside `backend/` (Karan Rahani) and `hospital/`
 (Mohammad Anas Qureshi).
@@ -26,7 +29,7 @@ The backend must be running separately:
 ```bash
 cd backend
 npm install
-npm start
+node server.js
 ```
 
 ### Setting `VITE_API_TARGET`
@@ -55,12 +58,23 @@ that point.
 
 ## Signing in
 
-The dashboard accepts **administrator accounts only**. A patient or doctor
-account reaches `/unauthorized`.
+The dashboard accepts **administrator and doctor accounts**. One login screen
+serves both: after authentication the role decides where you land.
+
+| Role | Lands on | Sees |
+|---|---|---|
+| `admin` | `/admin` | Administrator dashboard and profile |
+| `doctor` | `/doctor` | Doctor dashboard and profile |
+| `patient` | `/unauthorized` | Access Denied – patients use the mobile app |
+
+Each area is guarded separately, so a doctor opening `/admin` is refused just
+as an administrator opening `/doctor` is. This mirrors `roleMiddleware` on the
+backend, which answers `403` to the wrong role.
 
 `POST /api/auth/register` ignores the `role` field and creates every account as
-`patient`, so an admin cannot be created through the API. To create one, change
-a user's `role` to `"admin"` directly in MongoDB (Compass or Atlas).
+`patient`, so neither an admin nor a doctor can be created through the API. To
+create one, change a user's `role` to `"admin"` or `"doctor"` directly in
+MongoDB (Compass or Atlas).
 
 ## Backend endpoints used
 
@@ -68,7 +82,8 @@ a user's `role` to `"admin"` directly in MongoDB (Compass or Atlas).
 |---|---|---|
 | POST | `/api/auth/login` | Login |
 | GET | `/api/user/profile` | Profile |
-| GET | `/api/admin/dashboard` | Dashboard |
+| GET | `/api/admin/dashboard` | Administrator dashboard |
+| GET | `/api/doctor/dashboard` | Doctor dashboard |
 
 Two contracts worth noting, both encoded in `src/api/`:
 
@@ -84,20 +99,24 @@ Implemented and working against the real backend:
 
 - Login with validation and error states
 - JWT storage, session restore on reload, expiry handling
-- Protected routes with an admin-only role gate
+- Protected routes with a separate role gate for each staff area
 - Logout
-- Responsive admin layout (sidebar, header, content)
-- Dashboard – verifies the role gate end to end
-- Profile – read-only account and session details
+- Responsive layout (sidebar, header, content) shared by both areas
+- Role-aware navigation: each role sees only its own links
+- Administrator dashboard – verifies the admin role gate end to end
+- Doctor dashboard – verifies the doctor role gate end to end
+- Profile – read-only account and session details, for both roles
 
 Not implemented, because no backend endpoint exists yet:
 
-- Dashboard counts (patients, doctors, appointments, predictions)
-- Doctor, Patient, Appointment and Prediction management
+- Administrator: dashboard counts, and Doctor / Patient / Appointment /
+  Prediction management
+- Doctor: assigned appointments, appointment detail, accept / reject, mark
+  completed, patient details, availability
 
-Those four appear in the sidebar as disabled entries so the intended structure
-is visible without implying the features work. No mock or placeholder data is
-used anywhere in this application.
+These appear in each sidebar as disabled entries so the intended structure is
+visible without implying the features work. No mock or placeholder data is used
+anywhere in this application.
 
 ## Project structure
 
@@ -109,10 +128,12 @@ admin_dashboard/
     ├── api/                axios instance + endpoint wrappers
     ├── context/            AuthContext, token storage helpers
     ├── hooks/              useAuth
-    ├── routes/             ProtectedRoute
-    ├── layouts/            AdminLayout
+    ├── config/             navigation.js – per-role links, titles, landing path
+    ├── routes/             ProtectedRoute, RoleLanding
+    ├── layouts/            DashboardLayout (shared shell)
     ├── components/         Sidebar, Header, StatCard, Badge, states
-    ├── pages/              Login, Dashboard, Profile, Unauthorized, NotFound
+    ├── pages/              Login, AdminDashboard, DoctorDashboard, Profile,
+    │                       Unauthorized, NotFound
     └── styles/             variables.css (theme), global.css
 ```
 

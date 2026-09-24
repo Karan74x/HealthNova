@@ -19,3 +19,14 @@ export function getProfile() {
 export function getAdminDashboard() {
   return axiosInstance.get("/admin/dashboard");
 }
+
+/*
+ * GET /api/doctor/dashboard
+ * Requires a token and role "doctor". Returns { message: "Welcome Doctor",
+ * user } where user is the decoded token payload. Like the admin route it
+ * carries no data yet, so it serves as a live check that the doctor role gate
+ * accepts the signed-in account.
+ */
+export function getDoctorDashboard() {
+  return axiosInstance.get("/doctor/dashboard");
+}
