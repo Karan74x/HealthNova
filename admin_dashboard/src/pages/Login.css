@@ -28,21 +28,18 @@
   text-align: center;
 }
 
+/* The wordmark already carries the product name, so the heading is the image
+   itself and its alt text supplies the accessible name. */
 .login-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  margin-bottom: var(--space-sm);
-  border-radius: var(--radius-panel);
-  background: var(--primary-color);
-  color: var(--text-on-primary);
+  display: block;
+  width: 260px;
+  max-width: 100%;
+  height: auto;
 }
 
 .login-title {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  line-height: 0;
 }
 
 .login-subtitle {

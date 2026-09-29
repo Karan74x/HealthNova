@@ -1,4 +1,4 @@
-.admin-layout {
+.app-layout {
   display: flex;
   min-height: 100vh;
 }
@@ -26,15 +26,10 @@
 }
 
 .sidebar-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   width: 38px;
   height: 38px;
   flex-shrink: 0;
-  border-radius: var(--radius-control);
-  background: var(--primary-color);
-  color: var(--text-on-primary);
+  object-fit: contain;
 }
 
 .sidebar-brand-text {
@@ -134,7 +129,7 @@
 }
 
 /* ---------- Main column ---------- */
-.admin-main {
+.app-main {
   flex: 1;
   min-width: 0;
   margin-left: var(--sidebar-width);
@@ -142,7 +137,7 @@
   flex-direction: column;
 }
 
-.admin-header {
+.app-header {
   position: sticky;
   top: 0;
   z-index: 20;
@@ -155,7 +150,7 @@
   border-bottom: 1px solid var(--border-color);
 }
 
-.admin-header-menu {
+.app-header-menu {
   display: none;
   padding: var(--space-xs);
   border: none;
@@ -164,12 +159,12 @@
   cursor: pointer;
 }
 
-.admin-header-title {
+.app-header-title {
   font-size: var(--font-size-lg);
   font-weight: 600;
 }
 
-.admin-header-user {
+.app-header-user {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
@@ -177,7 +172,7 @@
   min-width: 0;
 }
 
-.admin-header-email {
+.app-header-email {
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
   overflow: hidden;
@@ -185,7 +180,7 @@
   white-space: nowrap;
 }
 
-.admin-content {
+.app-content {
   flex: 1;
   padding: var(--space-lg);
 }
@@ -214,25 +209,25 @@
     background: rgba(0, 0, 0, 0.4);
   }
 
-  .admin-main {
+  .app-main {
     margin-left: 0;
   }
 
-  .admin-header-menu {
+  .app-header-menu {
     display: block;
   }
 }
 
 @media (max-width: 600px) {
-  .admin-header {
+  .app-header {
     padding: 0 var(--space-md);
   }
 
-  .admin-header-email {
+  .app-header-email {
     display: none;
   }
 
-  .admin-content {
+  .app-content {
     padding: var(--space-md);
   }
 }

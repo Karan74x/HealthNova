@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Activity, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { getErrorMessage } from "../api/axiosInstance";
+import { getLandingPath } from "../config/navigation";
 import "./Login.css";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -54,11 +55,9 @@ export default function Login() {
     setIsSubmitting(true);
     try {
       const user = await login(form.email.trim(), form.password);
-      if (user.role === "admin") {
-        navigate("/admin", { replace: true });
-      } else {
-        navigate("/unauthorized", { replace: true });
-      }
+      // The role decides the area. A patient authenticates successfully but has
+      // no web area, so they land on Access Denied rather than a dashboard.
+      navigate(getLandingPath(user.role), { replace: true });
     } catch (error) {
       setFormError(
         getErrorMessage(error, "Unable to sign in. Please try again."),
@@ -72,11 +71,16 @@ export default function Login() {
     <div className="login-page">
       <div className="login-card">
         <div className="login-brand">
-          <span className="login-logo" aria-hidden="true">
-            <Activity size={26} />
-          </span>
-          <h1 className="login-title">HealthNova</h1>
-          <p className="login-subtitle">Admin Dashboard</p>
+          <h1 className="login-title">
+            <img
+              src="/logo-full.png"
+              alt="HealthNova"
+              className="login-logo"
+              width="260"
+              height="69"
+            />
+          </h1>
+          <p className="login-subtitle">Admin &amp; Doctor Dashboard</p>
         </div>
 
         {sessionExpired && (
@@ -103,7 +107,7 @@ export default function Login() {
               name="email"
               type="email"
               className="field-input"
-              placeholder="admin@healthnova.com"
+              placeholder="you@healthnova.com"
               value={form.email}
               onChange={handleChange}
               autoComplete="email"
@@ -154,7 +158,8 @@ export default function Login() {
         </form>
 
         <p className="login-footnote">
-          Administrator access only. Patients use the HealthNova mobile app.
+          Administrator and doctor accounts only. Patients use the HealthNova
+          mobile app.
         </p>
       </div>
     </div>

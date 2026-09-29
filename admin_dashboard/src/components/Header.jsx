@@ -3,20 +3,20 @@ import Badge from "./Badge";
 
 export default function Header({ title, user, onOpenSidebar }) {
   return (
-    <header className="admin-header">
+    <header className="app-header">
       <button
         type="button"
-        className="admin-header-menu"
+        className="app-header-menu"
         onClick={onOpenSidebar}
         aria-label="Open navigation"
       >
         <Menu size={22} />
       </button>
 
-      <h1 className="admin-header-title">{title}</h1>
+      <h1 className="app-header-title">{title}</h1>
 
-      <div className="admin-header-user">
-        <span className="admin-header-email">{user.email}</span>
+      <div className="app-header-user">
+        <span className="app-header-email">{user.email}</span>
         <Badge variant="info">{user.role}</Badge>
       </div>
     </header>

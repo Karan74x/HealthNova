@@ -26,7 +26,7 @@ const PENDING_STATS = [
   { label: "Total Predictions", icon: Activity },
 ];
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const { user } = useAuth();
   const [status, setStatus] = useState("loading");
   const [message, setMessage] = useState("");
