@@ -1,0 +1,115 @@
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-panel);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.data-table th {
+  padding: var(--space-sm) var(--space-md);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: var(--surface-muted);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+  background: var(--primary-surface);
+}
+
+.table-empty {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--text-secondary);
+  background: var(--surface-color);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-panel);
+}
+
+.table-primary {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.table-muted {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+}
+
+.table-actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+/* Below the layout breakpoint each row becomes its own card */
+@media (max-width: 720px) {
+  .table-wrap {
+    border: none;
+    background: none;
+  }
+
+  .data-table thead {
+    display: none;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table tr {
+    margin-bottom: var(--space-md);
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-panel);
+    overflow: hidden;
+  }
+
+  .data-table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+    text-align: right;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    text-align: left;
+  }
+
+  .table-actions {
+    justify-content: flex-end;
+  }
+}

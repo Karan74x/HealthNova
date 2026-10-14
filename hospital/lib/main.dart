@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:hospital/DoctorListScreen.dart';
-import 'package:hospital/Home_screen.dart';
-import 'package:hospital/bottombar.dart';
-import 'package:hospital/pratric.dart';
-import 'package:hospital/singup_Screen.dart';
+import 'package:hospital/Login_screen.dart';
+import 'package:hospital/services/api_client.dart';
+import 'package:hospital/services/session.dart';
 import 'package:hospital/splace_Screen.dart';
 
-void main() {
+/// Lets code outside the widget tree (the API client) move to the login
+/// screen when the session expires.
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Restore a saved login before the first screen decides where to go
+  await Session.load();
+
+  ApiClient.onUnauthorized = () {
+    navigatorKey.currentState?.pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+      (route) => false,
+    );
+  };
+
   runApp(const MyApp());
 }
 
@@ -16,34 +30,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'HealthNova',
+      navigatorKey: navigatorKey,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        // Every screen uses Colors.blue; seeding the scheme with it keeps
+        // dialogs, date pickers and progress indicators in the same colour.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: SplashScreen(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue[200],
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
     );
   }
 }

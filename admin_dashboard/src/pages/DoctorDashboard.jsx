@@ -1,112 +1,167 @@
-import { useCallback, useEffect, useState } from "react";
-import {
-  CalendarCheck,
-  CalendarClock,
-  CheckCircle2,
-  ShieldCheck,
-  Users,
-} from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, CalendarCheck, CalendarClock, Check, CheckCircle2, Users, X } from "lucide-react";
 import StatCard from "../components/StatCard";
+import DataTable from "../components/DataTable";
 import LoadingState from "../components/LoadingState";
 import ErrorState from "../components/ErrorState";
 import Badge from "../components/Badge";
-import { getDoctorDashboard } from "../api/userApi";
-import { getErrorMessage } from "../api/axiosInstance";
+import { useToast } from "../components/Toast";
+import { useResource } from "../hooks/useResource";
 import { useAuth } from "../hooks/useAuth";
+import { getStats, listAppointments, setAppointmentStatus } from "../api/doctorApi";
+import { getErrorMessage } from "../api/axiosInstance";
+import { STATUS_VARIANT, formatDate, isToday, minutesOf, personName } from "../utils/format";
 import "./Dashboard.css";
-
-/*
- * There is no Appointment model and no counting endpoint yet, so every figure
- * is marked pending rather than filled with an invented number.
- */
-const PENDING_STATS = [
-  { label: "Today's Appointments", icon: CalendarClock },
-  { label: "Pending Requests", icon: CalendarCheck },
-  { label: "Patients Seen", icon: Users },
-  { label: "Completed Visits", icon: CheckCircle2 },
-];
 
 export default function DoctorDashboard() {
   const { user } = useAuth();
-  const [status, setStatus] = useState("loading");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const notify = useToast();
+  const [busyId, setBusyId] = useState(null);
 
-  const loadDashboard = useCallback(async () => {
-    setStatus("loading");
-    setError("");
+  const stats = useResource(getStats, [], "Could not load your statistics.");
+  // One request for both lists below; the backend scopes it to this doctor
+  const appointments = useResource(() => listAppointments(), [], "Could not load your appointments.");
+
+  const decide = async (appointment, status) => {
+    setBusyId(appointment._id);
     try {
-      const { data } = await getDoctorDashboard();
-      setMessage(data.message);
-      setStatus("ready");
+      await setAppointmentStatus(appointment._id, status);
+      notify(status === "Approved" ? "Appointment accepted." : "Appointment declined.");
+      await Promise.all([appointments.reload({ quiet: true }), stats.reload({ quiet: true })]);
     } catch (requestError) {
-      setError(getErrorMessage(requestError, "Could not load the dashboard."));
-      setStatus("error");
+      notify(getErrorMessage(requestError, "Could not update the appointment."), "danger");
+    } finally {
+      setBusyId(null);
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    loadDashboard();
-  }, [loadDashboard]);
-
-  if (status === "loading") {
-    return <LoadingState message="Loading dashboard" />;
+  // The stats call fails with 404 when the account has no doctor profile; the
+  // backend's message explains how to fix that, so show it on its own.
+  if (stats.status === "error") {
+    return <ErrorState title="Your dashboard could not load" message={stats.error} onRetry={stats.reload} />;
   }
 
-  if (status === "error") {
-    return (
-      <ErrorState
-        title="Could not load the dashboard"
-        message={error}
-        onRetry={loadDashboard}
-      />
-    );
-  }
+  const figures = stats.data || {};
+  const ready = stats.status === "ready";
+  const cards = [
+    { label: "Today's Appointments", icon: CalendarClock, value: figures.todaysAppointments },
+    { label: "Pending Requests", icon: CalendarCheck, value: figures.pendingRequests },
+    { label: "Patients Seen", icon: Users, value: figures.patientsSeen, to: "/doctor/patients" },
+    { label: "Completed Visits", icon: CheckCircle2, value: figures.completedVisits },
+  ];
+
+  const list = appointments.data || [];
+  const requests = list.filter((row) => row.status === "Pending");
+  const today = list
+    .filter((row) => isToday(row.date) && row.status !== "Rejected")
+    .sort((a, b) => minutesOf(a.time) - minutesOf(b.time));
+
+  const requestColumns = [
+    {
+      key: "patient",
+      label: "Patient",
+      render: (row) => (
+        <div>
+          <div className="table-primary">{personName(row.patient)}</div>
+          <div className="table-muted">{row.patient?.phone}</div>
+        </div>
+      ),
+    },
+    {
+      key: "when",
+      label: "Requested for",
+      render: (row) => (
+        <div>
+          <div>{formatDate(row.date)}</div>
+          <div className="table-muted">{row.time}</div>
+        </div>
+      ),
+    },
+    { key: "reason", label: "Reason", render: (row) => row.reason || "—" },
+    {
+      key: "actions",
+      label: "Actions",
+      render: (row) => (
+        <div className="table-actions">
+          <button
+            type="button"
+            className="btn btn-primary btn-sm"
+            disabled={busyId === row._id}
+            onClick={() => decide(row, "Approved")}
+          >
+            <Check size={14} /> Accept
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm"
+            disabled={busyId === row._id}
+            onClick={() => decide(row, "Rejected")}
+          >
+            <X size={14} /> Decline
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  const todayColumns = [
+    { key: "time", label: "Time", render: (row) => <span className="table-primary">{row.time}</span> },
+    { key: "patient", label: "Patient", render: (row) => personName(row.patient) },
+    { key: "reason", label: "Reason", render: (row) => row.reason || "—" },
+    {
+      key: "status",
+      label: "Status",
+      render: (row) => <Badge variant={STATUS_VARIANT[row.status]}>{row.status}</Badge>,
+    },
+  ];
 
   return (
     <>
       <div className="page-header">
-        <h2>Welcome back</h2>
-        <p className="page-subtitle">
-          Signed in as {user.email} with doctor access.
-        </p>
+        <h2>Welcome back{user.name ? `, Dr. ${user.name.replace(/^Dr\.?\s*/i, "").split(" ")[0]}` : ""}</h2>
+        <p className="page-subtitle">Your appointments and requests at a glance.</p>
       </div>
 
-      <section className="card dashboard-status">
-        <span className="dashboard-status-icon" aria-hidden="true">
-          <ShieldCheck size={22} />
-        </span>
-        <div>
-          <p className="card-title">Backend connection verified</p>
-          <p className="card-subtitle">
-            GET /api/doctor/dashboard responded “{message}”, confirming the
-            token is valid and the doctor role gate accepts this account. An
-            administrator account calling the same route is refused with 403.
-          </p>
-        </div>
-        <Badge variant="success">Connected</Badge>
-      </section>
-
-      <h3 className="dashboard-section-title">Overview</h3>
       <div className="dashboard-stats">
-        {PENDING_STATS.map(({ label, icon }) => (
-          <StatCard key={label} label={label} icon={icon} pending />
+        {cards.map((card) => (
+          <StatCard
+            key={card.label}
+            {...card}
+            to={card.to || "/doctor/appointments"}
+            value={ready ? card.value : null}
+          />
         ))}
       </div>
 
-      <section className="card dashboard-note">
-        <p className="card-title">What this area will hold</p>
-        <p className="card-subtitle">
-          The doctor workflow documented for HealthNova is: view assigned
-          appointments, open an appointment to see its details and the
-          patient’s information, accept or reject a request, and mark a
-          completed consultation. None of it can be built yet, because the
-          backend has no Doctor or Appointment model and no endpoint that
-          returns appointments for the signed-in doctor. Authentication, the
-          role gate and the profile screen are live; the four cards above and
-          the disabled sidebar items stay empty until those endpoints exist.
-        </p>
-      </section>
+      {appointments.status === "loading" && <LoadingState message="Loading appointments" />}
+      {appointments.status === "error" && (
+        <ErrorState message={appointments.error} onRetry={appointments.reload} />
+      )}
+      {appointments.status === "ready" && (
+        <>
+          <section className="dashboard-section">
+            <div className="dashboard-section-head">
+              <h3>Requests to review</h3>
+              <Link to="/doctor/appointments" className="dashboard-section-link">
+                All appointments <ArrowRight size={16} />
+              </Link>
+            </div>
+            <DataTable
+              columns={requestColumns}
+              rows={requests}
+              empty="No new requests. Bookings patients make in the app appear here for you to accept."
+            />
+          </section>
+
+          <section className="dashboard-section">
+            <div className="dashboard-section-head">
+              <h3>Today’s schedule</h3>
+            </div>
+            <DataTable columns={todayColumns} rows={today} empty="Nothing scheduled for today." />
+          </section>
+        </>
+      )}
     </>
   );
 }

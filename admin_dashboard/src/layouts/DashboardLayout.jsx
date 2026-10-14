@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import { ToastProvider } from "../components/Toast";
 import { useAuth } from "../hooks/useAuth";
 import { getPageTitle } from "../config/navigation";
 import "./DashboardLayout.css";
@@ -23,24 +24,26 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="app-layout">
-      <Sidebar
-        role={user.role}
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-        onLogout={handleLogout}
-      />
-
-      <div className="app-main">
-        <Header
-          title={getPageTitle(pathname, user.role)}
-          user={user}
-          onOpenSidebar={() => setIsSidebarOpen(true)}
+    <ToastProvider>
+      <div className="app-layout">
+        <Sidebar
+          role={user.role}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+          onLogout={handleLogout}
         />
-        <main className="app-content">
-          <Outlet />
-        </main>
+
+        <div className="app-main">
+          <Header
+            title={getPageTitle(pathname, user.role)}
+            user={user}
+            onOpenSidebar={() => setIsSidebarOpen(true)}
+          />
+          <main className="app-content">
+            <Outlet />
+          </main>
+        </div>
       </div>
-    </div>
+    </ToastProvider>
   );
 }

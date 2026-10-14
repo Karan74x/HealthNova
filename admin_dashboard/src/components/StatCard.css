@@ -39,7 +39,7 @@
 
 .stat-card-note {
   font-size: var(--font-size-xs);
-  color: var(--text-disabled);
+  color: var(--text-secondary);
 }
 
 .stat-card-pending .stat-card-icon {
@@ -49,4 +49,22 @@
 
 .stat-card-pending .stat-card-value {
   color: var(--text-disabled);
+}
+
+.stat-link {
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+.stat-link:hover {
+  border-color: var(--primary-light);
+  box-shadow: var(--shadow-raised);
+  transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat-link:hover {
+    transform: none;
+  }
 }

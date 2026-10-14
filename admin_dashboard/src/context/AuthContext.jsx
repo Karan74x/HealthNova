@@ -6,6 +6,7 @@ import {
   getToken,
   isTokenExpired,
   saveSession,
+  saveStoredUser,
 } from "./authStorage";
 
 export const AuthContext = createContext(null);
@@ -40,6 +41,15 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+  // After the user edits their own details, keep the header and storage in step
+  const updateUser = useCallback((changes) => {
+    setUser((previous) => {
+      const next = { ...previous, ...changes };
+      saveStoredUser(next);
+      return next;
+    });
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -47,8 +57,9 @@ export function AuthProvider({ children }) {
       isRestoring,
       login,
       logout,
+      updateUser,
     }),
-    [user, isRestoring, login, logout],
+    [user, isRestoring, login, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

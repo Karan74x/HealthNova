@@ -16,7 +16,9 @@ export default function Header({ title, user, onOpenSidebar }) {
       <h1 className="app-header-title">{title}</h1>
 
       <div className="app-header-user">
-        <span className="app-header-email">{user.email}</span>
+        <span className="app-header-email" title={user.email}>
+          {user.name || user.email}
+        </span>
         <Badge variant="info">{user.role}</Badge>
       </div>
     </header>
