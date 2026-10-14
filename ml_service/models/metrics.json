@@ -1,0 +1,303 @@
+{
+  "trainedAt": "2026-10-14T10:16:51+00:00",
+  "sklearnVersion": "1.9.1",
+  "randomState": 42,
+  "models": {
+    "diabetes": {
+      "name": "Diabetes",
+      "dataset": "Pima Indians Diabetes Database (NIDDK, via UCI). 768 adult women.",
+      "rows": 768,
+      "positiveRate": 0.349,
+      "trainRows": 614,
+      "testRows": 154,
+      "selectedModel": "logistic_regression",
+      "crossValidationRocAuc": {
+        "logistic_regression": {
+          "mean": 0.848,
+          "std": 0.011
+        },
+        "random_forest": {
+          "mean": 0.835,
+          "std": 0.023
+        },
+        "gradient_boosting": {
+          "mean": 0.791,
+          "std": 0.025
+        }
+      },
+      "testSet": {
+        "rocAuc": 0.811,
+        "accuracy": 0.734,
+        "sensitivity": 0.722,
+        "specificity": 0.74,
+        "precision": 0.6,
+        "f1": 0.655,
+        "confusionMatrix": {
+          "tn": 74,
+          "fp": 26,
+          "fn": 15,
+          "tp": 39
+        }
+      },
+      "features": [
+        "pregnancies",
+        "glucose",
+        "bloodPressure",
+        "bmi",
+        "age",
+        "skinThickness",
+        "insulin",
+        "diabetesPedigree"
+      ]
+    },
+    "heart": {
+      "name": "Heart Disease",
+      "dataset": "Cleveland Heart Disease data (UCI). 303 patients.",
+      "rows": 303,
+      "positiveRate": 0.459,
+      "trainRows": 242,
+      "testRows": 61,
+      "selectedModel": "logistic_regression",
+      "crossValidationRocAuc": {
+        "logistic_regression": {
+          "mean": 0.901,
+          "std": 0.013
+        },
+        "random_forest": {
+          "mean": 0.896,
+          "std": 0.027
+        },
+        "gradient_boosting": {
+          "mean": 0.867,
+          "std": 0.017
+        }
+      },
+      "testSet": {
+        "rocAuc": 0.958,
+        "accuracy": 0.869,
+        "sensitivity": 0.929,
+        "specificity": 0.818,
+        "precision": 0.812,
+        "f1": 0.867,
+        "confusionMatrix": {
+          "tn": 27,
+          "fp": 6,
+          "fn": 2,
+          "tp": 26
+        }
+      },
+      "features": [
+        "age",
+        "sex",
+        "chestPain",
+        "restingBloodPressure",
+        "cholesterol",
+        "highFastingSugar",
+        "restingEcg",
+        "maxHeartRate",
+        "exerciseAngina",
+        "stDepression",
+        "stSlope",
+        "majorVessels",
+        "thalassemia"
+      ]
+    },
+    "liver": {
+      "name": "Liver Disease",
+      "dataset": "Indian Liver Patient Dataset (ILPD, UCI). 583 patients.",
+      "rows": 583,
+      "positiveRate": 0.714,
+      "trainRows": 466,
+      "testRows": 117,
+      "selectedModel": "random_forest",
+      "crossValidationRocAuc": {
+        "logistic_regression": {
+          "mean": 0.718,
+          "std": 0.02
+        },
+        "random_forest": {
+          "mean": 0.734,
+          "std": 0.03
+        },
+        "gradient_boosting": {
+          "mean": 0.732,
+          "std": 0.033
+        }
+      },
+      "testSet": {
+        "rocAuc": 0.792,
+        "accuracy": 0.726,
+        "sensitivity": 0.771,
+        "specificity": 0.618,
+        "precision": 0.831,
+        "f1": 0.8,
+        "confusionMatrix": {
+          "tn": 21,
+          "fp": 13,
+          "fn": 19,
+          "tp": 64
+        }
+      },
+      "features": [
+        "age",
+        "gender",
+        "totalBilirubin",
+        "alkalinePhosphatase",
+        "alt",
+        "ast",
+        "albumin",
+        "directBilirubin",
+        "totalProteins",
+        "agRatio"
+      ]
+    },
+    "kidney": {
+      "name": "Kidney Disease",
+      "dataset": "Chronic Kidney Disease dataset (UCI). 400 patients.",
+      "rows": 400,
+      "positiveRate": 0.62,
+      "trainRows": 320,
+      "testRows": 80,
+      "selectedModel": "logistic_regression",
+      "crossValidationRocAuc": {
+        "logistic_regression": {
+          "mean": 0.996,
+          "std": 0.008
+        },
+        "random_forest": {
+          "mean": 0.995,
+          "std": 0.011
+        },
+        "gradient_boosting": {
+          "mean": 0.995,
+          "std": 0.007
+        }
+      },
+      "testSet": {
+        "rocAuc": 0.978,
+        "accuracy": 0.988,
+        "sensitivity": 1.0,
+        "specificity": 0.967,
+        "precision": 0.98,
+        "f1": 0.99,
+        "confusionMatrix": {
+          "tn": 29,
+          "fp": 1,
+          "fn": 0,
+          "tp": 50
+        }
+      },
+      "features": [
+        "age",
+        "bloodPressure",
+        "serumCreatinine",
+        "hemoglobin",
+        "hypertension",
+        "diabetes",
+        "bloodUrea",
+        "bloodGlucose",
+        "specificGravity",
+        "urineAlbumin",
+        "appetite",
+        "pedalEdema",
+        "anemia"
+      ]
+    },
+    "stroke": {
+      "name": "Stroke",
+      "dataset": "Stroke Prediction dataset (Kaggle, fedesoriano). 5,110 people.",
+      "rows": 5109,
+      "positiveRate": 0.049,
+      "trainRows": 4087,
+      "testRows": 1022,
+      "selectedModel": "logistic_regression",
+      "crossValidationRocAuc": {
+        "logistic_regression": {
+          "mean": 0.839,
+          "std": 0.018
+        },
+        "random_forest": {
+          "mean": 0.829,
+          "std": 0.018
+        },
+        "gradient_boosting": {
+          "mean": 0.829,
+          "std": 0.03
+        }
+      },
+      "testSet": {
+        "rocAuc": 0.84,
+        "accuracy": 0.734,
+        "sensitivity": 0.82,
+        "specificity": 0.729,
+        "precision": 0.135,
+        "f1": 0.232,
+        "confusionMatrix": {
+          "tn": 709,
+          "fp": 263,
+          "fn": 9,
+          "tp": 41
+        }
+      },
+      "features": [
+        "gender",
+        "age",
+        "hypertension",
+        "heartDisease",
+        "avgGlucose",
+        "bmi",
+        "smokingStatus"
+      ]
+    },
+    "hypertension": {
+      "name": "Hypertension",
+      "dataset": "Framingham Heart Study teaching dataset. 4,240 participants.",
+      "rows": 4240,
+      "positiveRate": 0.311,
+      "trainRows": 3392,
+      "testRows": 848,
+      "selectedModel": "logistic_regression",
+      "crossValidationRocAuc": {
+        "logistic_regression": {
+          "mean": 0.768,
+          "std": 0.022
+        },
+        "random_forest": {
+          "mean": 0.751,
+          "std": 0.026
+        },
+        "gradient_boosting": {
+          "mean": 0.749,
+          "std": 0.028
+        }
+      },
+      "testSet": {
+        "rocAuc": 0.742,
+        "accuracy": 0.652,
+        "sensitivity": 0.658,
+        "specificity": 0.65,
+        "precision": 0.458,
+        "f1": 0.54,
+        "confusionMatrix": {
+          "tn": 380,
+          "fp": 205,
+          "fn": 90,
+          "tp": 173
+        }
+      },
+      "features": [
+        "sex",
+        "age",
+        "bmi",
+        "currentSmoker",
+        "diabetes",
+        "cigarettesPerDay",
+        "totalCholesterol",
+        "heartRate",
+        "glucose",
+        "previousStroke"
+      ]
+    }
+  },
+  "trainingSeconds": 33.5
+}

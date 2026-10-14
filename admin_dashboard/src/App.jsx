@@ -4,7 +4,13 @@ import RoleLanding from "./routes/RoleLanding";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminDoctors from "./pages/admin/AdminDoctors";
+import AdminPatients from "./pages/admin/AdminPatients";
+import AdminAppointments from "./pages/admin/AdminAppointments";
+import AdminPredictions from "./pages/admin/AdminPredictions";
 import DoctorDashboard from "./pages/DoctorDashboard";
+import DoctorAppointments from "./pages/doctor/DoctorAppointments";
+import DoctorPatients from "./pages/doctor/DoctorPatients";
 import Profile from "./pages/Profile";
 import Unauthorized from "./pages/Unauthorized";
 import NotFound from "./pages/NotFound";
@@ -25,6 +31,10 @@ export default function App() {
       <Route element={<ProtectedRoute requiredRole="admin" />}>
         <Route path="/admin" element={<DashboardLayout />}>
           <Route index element={<AdminDashboard />} />
+          <Route path="doctors" element={<AdminDoctors />} />
+          <Route path="patients" element={<AdminPatients />} />
+          <Route path="appointments" element={<AdminAppointments />} />
+          <Route path="predictions" element={<AdminPredictions />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>
@@ -32,6 +42,8 @@ export default function App() {
       <Route element={<ProtectedRoute requiredRole="doctor" />}>
         <Route path="/doctor" element={<DashboardLayout />}>
           <Route index element={<DoctorDashboard />} />
+          <Route path="appointments" element={<DoctorAppointments />} />
+          <Route path="patients" element={<DoctorPatients />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       </Route>

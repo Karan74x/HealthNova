@@ -20,6 +20,11 @@ export function saveSession(token, user) {
   localStorage.setItem(USER_KEY, JSON.stringify(user));
 }
 
+// Replace the stored user details without touching the token
+export function saveStoredUser(user) {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
 export function clearSession() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);

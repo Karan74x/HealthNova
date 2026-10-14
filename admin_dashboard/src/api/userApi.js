@@ -4,29 +4,27 @@ import axiosInstance from "./axiosInstance";
  * GET /api/user/profile
  * Requires a token. Returns { message, user } where user is the decoded JWT
  * payload - { userId, role, iat, exp } - and not the stored user document.
- * Email and phone are therefore taken from the login response instead.
+ * The profile page uses it for the session expiry; account details come from
+ * GET /api/user/me below.
  */
 export function getProfile() {
   return axiosInstance.get("/user/profile");
 }
 
 /*
- * GET /api/admin/dashboard
- * Requires a token and role "admin". Returns { message: "Welcome Admin" }.
- * There is no data payload yet, so this serves as a live check that the
- * role gate accepts the signed-in user.
+ * GET /api/user/me
+ * The signed-in user's own account record (name, email, phone, gender, dob,
+ * role). Unlike /user/profile this is the stored document, not the token.
  */
-export function getAdminDashboard() {
-  return axiosInstance.get("/admin/dashboard");
+export function getMe() {
+  return axiosInstance.get("/user/me");
 }
 
 /*
- * GET /api/doctor/dashboard
- * Requires a token and role "doctor". Returns { message: "Welcome Doctor",
- * user } where user is the decoded token payload. Like the admin route it
- * carries no data yet, so it serves as a live check that the doctor role gate
- * accepts the signed-in account.
+ * PUT /api/user/me
+ * Update the signed-in user's own name, phone, gender or date of birth.
+ * Email, password and role cannot be changed here.
  */
-export function getDoctorDashboard() {
-  return axiosInstance.get("/doctor/dashboard");
+export function updateMe(payload) {
+  return axiosInstance.put("/user/me", payload);
 }

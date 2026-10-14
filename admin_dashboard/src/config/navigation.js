@@ -1,8 +1,6 @@
 import {
   Activity,
   CalendarCheck,
-  ClipboardList,
-  History,
   LayoutDashboard,
   Stethoscope,
   UserRound,
@@ -12,11 +10,12 @@ import {
 /*
  * One place that describes both staff areas.
  *
- * `links` are the screens that actually work; `pending` are the modules the
- * backend cannot support yet. They are rendered as disabled entries so the
- * intended structure is visible without implying the features exist. Keeping
- * the navigation and the page titles together stops the two drifting apart
- * when a screen is added.
+ * `links` are the screens of each area. `pending` lists modules that are
+ * planned but not yet backed by an endpoint; the sidebar shows them as
+ * disabled entries. Every module now has its endpoints, so both lists are
+ * empty - the mechanism stays for anything added later. Keeping navigation
+ * and page titles together stops the two drifting apart when a screen is
+ * added.
  */
 export const ROLE_AREAS = {
   admin: {
@@ -24,28 +23,24 @@ export const ROLE_AREAS = {
     label: "Admin",
     links: [
       { to: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
+      { to: "/admin/doctors", label: "Doctors", icon: Stethoscope },
+      { to: "/admin/patients", label: "Patients", icon: Users },
+      { to: "/admin/appointments", label: "Appointments", icon: CalendarCheck },
+      { to: "/admin/predictions", label: "Predictions", icon: Activity },
       { to: "/admin/profile", label: "Profile", icon: UserRound },
     ],
-    pending: [
-      { label: "Doctors", icon: Stethoscope },
-      { label: "Patients", icon: Users },
-      { label: "Appointments", icon: CalendarCheck },
-      { label: "Predictions", icon: Activity },
-    ],
+    pending: [],
   },
   doctor: {
     basePath: "/doctor",
     label: "Doctor",
     links: [
       { to: "/doctor", label: "Dashboard", icon: LayoutDashboard, end: true },
+      { to: "/doctor/appointments", label: "Appointments", icon: CalendarCheck },
+      { to: "/doctor/patients", label: "Patients", icon: Users },
       { to: "/doctor/profile", label: "Profile", icon: UserRound },
     ],
-    pending: [
-      { label: "Appointments", icon: CalendarCheck },
-      { label: "Patients", icon: Users },
-      { label: "Consultation History", icon: History },
-      { label: "Availability", icon: ClipboardList },
-    ],
+    pending: [],
   },
 };
 
@@ -66,6 +61,7 @@ export function getLandingPath(role) {
 export function getPageTitle(pathname, role) {
   const area = getArea(role);
   if (!area) return "HealthNova";
-  const match = area.links.find((link) => link.to === pathname);
+  const path = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const match = area.links.find((link) => link.to === path);
   return match ? match.label : area.label;
 }

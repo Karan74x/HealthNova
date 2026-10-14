@@ -3,9 +3,8 @@ import { getToken, clearSession } from "../context/authStorage";
 
 /*
  * Requests go to the relative path /api, which the Vite dev server proxies to
- * the backend (see vite.config.js). Because the request is same-origin from
- * the browser's point of view, the backend's missing CORS middleware does not
- * block it.
+ * the backend (see vite.config.js). The request is same-origin from the
+ * browser's point of view, so no CORS setup is needed for the dashboard.
  */
 const axiosInstance = axios.create({
   baseURL: "/api",

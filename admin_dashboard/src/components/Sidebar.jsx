@@ -5,10 +5,9 @@ import { getArea } from "../config/navigation";
 /*
  * Navigation for whichever staff area the signed-in role belongs to.
  *
- * Only the screens the backend can actually serve are links. The rest are
- * rendered as disabled entries so the intended structure is visible without
- * implying that the features work; they become links once the matching
- * endpoints exist.
+ * Every screen the backend can serve is a link. Anything listed as pending in
+ * config/navigation.js is rendered as a disabled entry, so a planned module is
+ * visible without implying that it works.
  */
 export default function Sidebar({ role, isOpen, onClose, onLogout }) {
   const area = getArea(role);
@@ -64,7 +63,9 @@ export default function Sidebar({ role, isOpen, onClose, onLogout }) {
             </NavLink>
           ))}
 
-          <p className="sidebar-group-label">Awaiting backend</p>
+          {area.pending.length > 0 && (
+            <p className="sidebar-group-label">Awaiting backend</p>
+          )}
 
           {area.pending.map(({ label, icon: Icon }) => (
             <span
