@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hospital/models/appointment.dart';
+import 'package:hospital/services/healthnova_api.dart';
+import 'package:hospital/widgets/common.dart';
 
 // Appointment Model
 class Appointment {
@@ -624,6 +627,68 @@ class AppointmentDetailScreen extends StatelessWidget {
   final Appointment appointment;
 
   const AppointmentDetailScreen({super.key, required this.appointment});
+
+  @override
+  State<AppointmentScreen> createState() => _AppointmentScreenState();
+}
+
+class _AppointmentScreenState extends State<AppointmentScreen> {
+  late Future<List<Appointment>> _appointments;
+  String? _cancellingId;
+
+  @override
+  void initState() {
+    super.initState();
+    _appointments = HealthNovaApi.myAppointments();
+  }
+
+  Future<void> _load() async {
+    final next = HealthNovaApi.myAppointments();
+    setState(() => _appointments = next);
+    try {
+      await next;
+    } catch (_) {
+      // Shown by the FutureBuilder
+    }
+  }
+
+  Future<void> _cancel(Appointment appointment) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Cancel this request?'),
+        content: Text(
+          'Your request with ${appointment.doctor?.displayName ?? 'the doctor'} on '
+          '${formatDate(appointment.date)} at ${appointment.time} will be removed.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Keep it'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red[700]),
+            child: const Text('Cancel request'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _cancellingId = appointment.id);
+    try {
+      await HealthNovaApi.cancelAppointment(appointment.id);
+      if (!mounted) return;
+      showMessage(context, 'Appointment request cancelled.');
+      await _load();
+    } catch (error) {
+      if (!mounted) return;
+      showMessage(context, errorText(error), error: true);
+    } finally {
+      if (mounted) setState(() => _cancellingId = null);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

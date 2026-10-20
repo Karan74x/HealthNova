@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hospital/PredictionScreen.dart';
+import 'package:hospital/models/prediction.dart';
+import 'package:hospital/services/healthnova_api.dart';
+import 'package:hospital/widgets/common.dart';
 
 // Report Model
 class MedicalReport {

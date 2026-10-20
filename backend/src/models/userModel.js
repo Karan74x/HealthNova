@@ -2,6 +2,13 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
+    // Display name. Optional so existing accounts stay valid; the dashboard
+    // falls back to the email address when it is missing.
+    name: {
+      type: String,
+      trim: true,
+    },
+
     // Phone number
     phone: {
       type: String,

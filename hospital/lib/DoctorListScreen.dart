@@ -36,7 +36,10 @@ class Doctor {
 }
 
 class DoctorListScreen extends StatefulWidget {
-  const DoctorListScreen({super.key});
+  const DoctorListScreen({super.key, this.initialSearch = ''});
+
+  /// Search text carried over from the Home screen's search box.
+  final String initialSearch;
 
   @override
   State<DoctorListScreen> createState() => _DoctorListScreenState();
@@ -215,8 +218,27 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     super.dispose();
   }
 
+  Future<void> _load() async {
+    final next = HealthNovaApi.doctors(search: searchController.text);
+    setState(() => _doctors = next);
+    try {
+      await next;
+    } catch (_) {
+      // Shown by the FutureBuilder
+    }
+  }
+
+  void _clearSearch() {
+    searchController.clear();
+    _load();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Opened from Home's search there is a page to go back to; as a tab there
+    // is not, and popping would leave the app.
+    final canGoBack = Navigator.canPop(context);
+
     return Scaffold(
       backgroundColor: Colors.blue[100],
       appBar: AppBar(
@@ -1222,7 +1244,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                 child: const Text("Cancel", style: TextStyle(fontSize: 16)),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

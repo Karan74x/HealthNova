@@ -13,20 +13,27 @@ class _BannerSectionState extends State<BannerSection> {
 
   final List<Map<String, dynamic>> _banners = [
     {
-      'title': 'Medical Center',
+      'title': 'Book a Specialist',
       'description':
-          'Yorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis.',
+          'Browse HealthNova doctors by name or speciality and request an appointment in a few taps.',
       'image':
           'https://randomuser.me/api/portraits/men/32.jpg', // replace with your doctor image
       'color': Colors.teal,
     },
     {
-      'title': 'Online Consultation',
-      'description': 'Talk with a specialist from home.',
+      'title': 'Know Your Risk',
+      'description':
+          'Check your risk of diabetes, heart disease and four other conditions with our trained models.',
       'image': 'https://randomuser.me/api/portraits/women/44.jpg',
       'color': Colors.blue,
     },
   ];
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +84,21 @@ class _BannerSectionState extends State<BannerSection> {
                     ),
                     Expanded(
                       flex: 4,
-                      child: Image.network(banner['image'], fit: BoxFit.cover),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          banner['image'],
+                          fit: BoxFit.cover,
+                          height: double.infinity,
+                          // Offline or blocked: show an icon instead
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(
+                                Icons.medical_services,
+                                color: Colors.white,
+                                size: 56,
+                              ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hospital/AppointmentScreen.dart';
 import 'package:hospital/DoctorListScreen.dart';
 import 'package:hospital/Home_screen.dart';
+import 'package:hospital/ProfileScreen.dart';
 import 'package:hospital/ReportsScreen.dart';
 
 class bottom_screen extends StatefulWidget {
@@ -19,16 +21,25 @@ class _bottom_screenState extends State<bottom_screen> {
     });
   }
 
-  List screen = [HomeScreen(), DoctorListScreen(), ReportsScreen()];
-
   @override
   Widget build(BuildContext context) {
+    // Built on each switch, so a tab shows fresh data when it is opened
+    // (for example a new booking on the Appointments tab).
+    final List<Widget> screen = [
+      HomeScreen(onOpenTab: indexChange),
+      const DoctorListScreen(),
+      const AppointmentScreen(),
+      const ReportsScreen(),
+      const ProfileScreen(),
+    ];
+
     return Scaffold(
       body: screen[currentI],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentI,
+        type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.blue[200],
-        selectedIconTheme: IconThemeData(color: Colors.blue),
+        selectedIconTheme: const IconThemeData(color: Colors.blue),
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.black,
 
@@ -37,21 +48,31 @@ class _bottom_screenState extends State<bottom_screen> {
 
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_outlined),
             label: 'Home',
 
             activeIcon: Icon(Icons.home_filled),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.group),
-            activeIcon: Icon(Icons.group_outlined),
-            label: 'doctor',
+            icon: Icon(Icons.group_outlined),
+            activeIcon: Icon(Icons.group),
+            label: 'Doctors',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.report),
+            icon: Icon(Icons.calendar_month_outlined),
+            activeIcon: Icon(Icons.calendar_month),
+            label: 'Bookings',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.monitor_heart_outlined),
             label: 'Report',
 
-            activeIcon: Icon(Icons.report_outlined),
+            activeIcon: Icon(Icons.monitor_heart),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),

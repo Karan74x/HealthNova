@@ -497,6 +497,122 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 8),
+              const BannerSection(),
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Row(
+                  children: [
+                    _QuickAction(
+                      icon: Icons.medical_services,
+                      label: "Find a\ndoctor",
+                      onTap: () => widget.onOpenTab(doctorsTab),
+                    ),
+                    _QuickAction(
+                      icon: Icons.calendar_month,
+                      label: "My\nappointments",
+                      onTap: () => widget.onOpenTab(appointmentsTab),
+                    ),
+                    _QuickAction(
+                      icon: Icons.monitor_heart,
+                      label: "Check\ndisease risk",
+                      onTap: () => widget.onOpenTab(reportsTab),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  "Upcoming appointment",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 8),
+              FutureBuilder<List<Appointment>>(
+                future: _appointments,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return const LoadingView();
+                  }
+                  if (snapshot.hasError) {
+                    return ErrorView(
+                      message: errorText(snapshot.error!),
+                      onRetry: _refresh,
+                    );
+                  }
+                  final upcoming = snapshot.data!
+                      .where((appointment) => appointment.isUpcoming)
+                      .toList()
+                    ..sort((a, b) => a.date!.compareTo(b.date!));
+                  if (upcoming.isEmpty) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.event_available,
+                              color: Colors.blue),
+                          title: const Text("No upcoming appointments"),
+                          subtitle: const Text("Book a doctor in a few taps."),
+                          trailing: TextButton(
+                            onPressed: () => widget.onOpenTab(doctorsTab),
+                            child: const Text("Book"),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return _NextAppointmentCard(
+                    appointment: upcoming.first,
+                    onTap: () => widget.onOpenTab(appointmentsTab),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickAction extends StatelessWidget {
+  const _QuickAction({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Material(
+          color: Colors.blueAccent,
+          borderRadius: BorderRadius.circular(15),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(15),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              child: Column(
+                children: [
+                  Icon(icon, color: Colors.white, size: 30),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white, fontSize: 13),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
