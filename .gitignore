@@ -1,3 +1,5 @@
 node_modules/
 .env
 .env.*
+# Local backup of the old Flutter app
+/hospital_old/
